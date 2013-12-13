@@ -10,7 +10,7 @@ var Runtime = require('./lib/runtime.js').Runtime,
 var REPL = module.exports.REPL = function() {
     var self = this,
         runtime = new Runtime,
-        parser = new Parser();
+        parser = new Parser;
 
     var readLine = require('readline').createInterface({
         input: process.stdin,
