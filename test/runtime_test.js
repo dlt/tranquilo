@@ -1,18 +1,28 @@
 var assert = require('assert'),
     Runtime = require('../lib/runtime.js').Runtime,
+    Parser = require('../lib/parser.js').Parser,
     runtime,
+    parser,
+    eval,
     builtIn;
 
 suite("Runtime", function() {
+
     setup(function() {
-        runtime = new Runtime();
+        parser = new Parser;
+        runtime = new Runtime;
         builtIn = runtime.globalScope.scope;
+
+        eval = function(str) {
+            return runtime.eval(parser.parse(str));
+        }
     });
 
     test("builtIn['+']", function() {
         assert.equal(1, builtIn['+'](1));
         assert.equal(4, builtIn['+'](2, 2));
         assert.equal(6, builtIn['+'](2, 2, 2));
+
     });
 
     test("builtIn['-']", function() {
@@ -106,7 +116,38 @@ suite("Runtime", function() {
 
     test("builtIn['null?']", function() {
         var nil = builtIn['null?'];
-        assert.deepEqual(true, nil(builtIn.list()));
-        assert.deepEqual(false, nil(builtIn.list(1, 2)));
+        assert.equal(true, nil(builtIn.list()));
+        assert.equal(false, nil(builtIn.list(1, 2)));
+    });
+
+    suite("Runtime.eval", function() {
+        test("it should apply built-in functions", function() {
+            var program = "(+ 2 2)";
+            assert.equal(4, eval(program));
+
+            program = "(+ 2 2 2)";
+            assert.equal(6, eval(program));
+
+            program = "(+ 12 2 2)";
+            assert.equal(16, eval(program));
+
+
+            program = "(+ 12 2 (- 20 10))";
+            assert.equal(24, eval(program));
+
+            program = "(+ 12 (- 20 10) 2)";
+            assert.equal(24, eval(program));
+        });
+
+        test("it should support application", function() {
+            var program = "((lambda (x) (* x x)) 5)";
+            assert.equal(25, eval(program));
+        });
+
+        test("it should support nested lambda applications", function() {
+            var program = "(((lambda (x) (lambda (y) (+ y x))) 3) 4)";
+            assert.equal(7, eval(program));
+        });
+
     });
 });
