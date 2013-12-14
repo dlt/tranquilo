@@ -158,5 +158,16 @@ suite("Runtime", function() {
             var program = "(begin (if (< 5 10) 10 5) (> 3 2))";
             assert.equal(true, eval(program));
         });
+
+        test("it should implement the 'set!' special form", function() {
+            var program = "(begin (set! z (* 3 2)) z)";
+            assert.equal(6, eval(program));
+        });
+
+
+        test("it should implement the 'define' special form", function() {
+            var program = "(begin (define zz (* 10 10)) zz)";
+            assert.equal(100, eval(program));
+        });
     });
 });
