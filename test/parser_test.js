@@ -7,8 +7,8 @@ function debugTransform(tree) {
     for (var i in tree) {
         var node = tree[i];
 
-        if (typeof node.getName != 'undefined') {
-            newTree.push(node.getName());
+        if (typeof node.name !== 'undefined') {
+            newTree.push(node.name);
         } else if (Array.isArray(node)) {
             newTree.push(debugTransform(node));
         } else {
