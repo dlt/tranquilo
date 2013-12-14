@@ -153,5 +153,10 @@ suite("Runtime", function() {
             var program = "(if (> 3 2) (if (< 5 10) 10 5) 2)";
             assert.equal(10, eval(program));
         });
+
+        test("it should implement the 'begin' special form", function() {
+            var program = "(begin (if (< 5 10) 10 5) (> 3 2))";
+            assert.equal(true, eval(program));
+        });
     });
 });
