@@ -167,12 +167,24 @@ suite("Runtime", function() {
         test("it should implement the 'define' special form", function() {
             var program = "(begin (define zz (* 10 10)) zz)";
             assert.equal(100, eval(program));
+
+            program = "(begin (define l (lambda (x) (* x x))) (map l (list 1 2 3)))";
+            assert.deepEqual([1, 4, 9], eval(program));
+        });
+
+        test("it should implement the 'map' built in function as a primitive function", function() {
+            var program = '(map (lambda (x) (* 2 x)) (list 1 2 4))';
+            assert.deepEqual([2, 4, 8], eval(program));
+            program = '(map (lambda (x) (* x x)) (list 1 2 4))';
+            assert.deepEqual([1, 4, 16], eval(program));
         });
 
 
-        test("it should implement the 'define' special form", function() {
-            var program = '(map (lambda (x) (* 2 x)) (list 1 2 4))';
-            assert.deepEqual([2, 4, 8], eval(program));
+        test("it should implement the 'quote' special form", function() {
+            var program = "(begin (set! L (quote foo)) L)",
+                symbol = eval(program);
+
+            assert.equal("foo", symbol.name);
         });
     });
 });
