@@ -164,10 +164,15 @@ suite("Runtime", function() {
             assert.equal(6, eval(program));
         });
 
-
         test("it should implement the 'define' special form", function() {
             var program = "(begin (define zz (* 10 10)) zz)";
             assert.equal(100, eval(program));
+        });
+
+
+        test("it should implement the 'define' special form", function() {
+            var program = '(map (lambda (x) (* 2 x)) (list 1 2 4))';
+            assert.deepEqual([2, 4, 8], eval(program));
         });
     });
 });
