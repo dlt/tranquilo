@@ -5,7 +5,8 @@
  *
  * */
 var Runtime = require('./lib/runtime.js').Runtime,
-    Parser = require('./lib/parser.js').Parser;
+    Parser = require('./lib/parser.js').Parser,
+    DEBUG = true;
 
 var REPL = module.exports.REPL = function() {
     var self = this,
@@ -19,24 +20,44 @@ var REPL = module.exports.REPL = function() {
     });
 
     readLine.on('line', function(line) {
-         var val = runtime.eval(parser.parse(line));
-         if (val) {
-             console.log(val);
-         }
+        var value;
+        if (DEBUG) {
+            self.benchmark(function() {
+                console.log(self.toSchemeString(runtime.eval(parser.parse(line))));
+            });
+        } else {
+            console.log(self.toSchemeString(runtime.eval(parser.parse(line))));
+        }
     });
+}
+
+REPL.prototype.benchmark = function(procedure) {
+    var start = new Date,
+        end,
+        diff;
+
+    procedure.apply(this, []);
+    end = new Date;
+    diff = end.getMilliseconds() - start.getMilliseconds();
+
+    console.log('running time (milliseconds): ' + diff.toString());
 }
 
 REPL.prototype.toSchemeString = function(exp) {
     var self = this,
         string;
 
-    if (Array.isArray(exp)) {
-        string = exp.map(function(e) { return self.toSchemeString(e); }).join('');
+    if (typeof exp === 'undefined') {
+      string = '';
+    }
+    else if (Array.isArray(exp)) {
+        string = exp.map(function(e) { return self.toSchemeString(e); }).join(' ');
+        string = '(' + string + ')';
     }
     else {
         string = exp.toString();
     }
-    return '(' + string + ')';
+    return string;
 }
 
 new REPL;
