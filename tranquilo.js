@@ -4,8 +4,8 @@
  * A minimal Scheme interpreter in JavaScript.
  *
  * */
-var Runtime = require('./lib/runtime.js').Runtime,
-    Parser = require('./lib/parser.js').Parser,
+var Parser = require('./lib/parser.js').Parser,
+    Runtime = require('./lib/runtime.js').Runtime,
     DEBUG = true;
 
 var REPL = module.exports.REPL = function() {
@@ -20,7 +20,6 @@ var REPL = module.exports.REPL = function() {
     });
 
     readLine.on('line', function(line) {
-        var value;
         if (DEBUG) {
             self.benchmark(function() {
                 console.log(self.toSchemeString(runtime.eval(parser.parse(line))));

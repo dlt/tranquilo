@@ -137,6 +137,15 @@ suite("Runtime", function() {
 
             program = "(+ 12 (- 20 10) 2)";
             assert.equal(24, eval(program));
+
+            program = "(* 12 2)";
+            assert.equal(24, eval(program));
+
+            program = "(/ 12 2)";
+            assert.equal(6, eval(program));
+
+            assert.equal(false, eval("(not true)"));
+            assert.equal(true, eval("(not false)"));
         });
 
         test("it should support application", function() {
