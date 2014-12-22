@@ -188,6 +188,14 @@ suite("Runtime", function() {
             assert.deepEqual([1, 4, 16], eval(program));
         });
 
+        test("it should implement cond special form", function() {
+            var code = '(cond ((= 1 1) true) (else  2) )';
+            assert.equal(true, eval(code));
+
+
+            var code = '(cond ((= 1 2) true) (else  2) )';
+            assert.equal(2, eval(code));
+        });
 
         test("it should implement the 'quote' special form", function() {
             var program = "(begin (set! L (quote foo)) L)",
