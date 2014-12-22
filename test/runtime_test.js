@@ -195,6 +195,10 @@ suite("Runtime", function() {
 
             var code = '(cond ((= 1 2) true) (else  2) )';
             assert.equal(2, eval(code));
+
+
+            var code = '(cond ((= 1 2) true) ((= 2 2) 3)   (else  2) )';
+            assert.equal(3, eval(code));
         });
 
         test("it should implement the 'quote' special form", function() {
