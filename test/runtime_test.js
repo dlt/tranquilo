@@ -207,5 +207,12 @@ suite("Runtime", function() {
 
             assert.equal("foo", symbol.name);
         });
+
+
+        test("it should support internal definitions", function() {
+            var code = '(begin (define zz (lambda(y)(begin (define foo (lambda (x) (+ x y))) (foo 5)))) (zz 3)) '
+            assert.equal(8, eval(code));
+        });
+
     });
 });
