@@ -217,5 +217,26 @@ suite("Runtime", function() {
             assert.equal(8, eval(code));
         });
 
+        test("it should be able to see if a expression is a tagged list of a certain type", function() {
+          var expression = parser.parse("(lambda (x) (+ x x))");
+          assert.equal(true, runtime.isTaggedList("lambda", expression));
+        });
+
+        test("it should be able to see if a expression is a lambda", function() {
+          var expression = parser.parse("(lambda (x) (+ x x))");
+          assert.equal(true, runtime.isLambda(expression));
+        });
+
+        test("it should be able to extract the formal parameters of a lambda expression", function() {
+          var expression = parser.parse("(lambda (x) (+ x x))"),
+              parameters = runtime.lambdaParameters(expression);
+          assert.equal(parameters[0].name, "x");
+        });
+
+        test("it should be able to extract the body of a lambda expression", function() {
+          var expression = parser.parse("(lambda (x) (+ x x))"),
+              body = runtime.lambdaBody(expression);
+          assert.deepEqual(["+", "x", "x"], body.map(function(symbol) { return symbol.name; }));
+        });
     });
 });
